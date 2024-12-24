@@ -1,0 +1,26 @@
+What functionalities do you need to plan and execute robot end-effector motion? 
+
+Robot description: URDF of the structure, joints, links, kinematic properties. Planning groups: planning and executing motions for specific parts/groups e.g. arm or end-effector. Kinematics and inverse kinematics solvers: calculates the needed configuration to reach the desired end-effector pose. Motion planning: algorithm to calculate path between start and goal states. Collision detection: check if end-effector can even move to the desired location. 
+
+How is motion planning via RViz limited, compared to utilizing Python/C++?
+
+While RViz provides user-friendly interactive environment for basic and static motion planning with a simulated robot. Motion planning C++ or Python gives the ability to create customizable and robust solutions e.g. feedback loops, additional sensors, error handling. The programmatic motion planning can also be more effectively used with a real robot not just the simulated one.
+
+What is the robot’s Null space?
+
+Robot's null space refers to the set of joint movements / configurations that do not affect the position and orientation of the end-effector. This has to do with redundant degrees of freedom in the sense that there are multiple joint configurations that can produce the same end-effector position and orientation.
+
+How is planning motions different for robot joint space and Cartesian (or work) space?
+
+Planning motions in joint space: Path from start to goal is represented by a series of joint configurations. Focuses only on the angle/position of each joint, thus the actual position of the robot/end-effector might be unclear and the path of the end-effector is not exact. Variables are angles.
+
+Planning motions in cartesian space: Path from start to goal is represented by specifying a trajectory in terms of the position and orientation of the end-effector.
+Variables are x y z coordinates.
+
+Name few different constraints that apply in joint space 
+
+Joints range of motion limits e.g. 90 degrees, 180 degrees etc. Velocity and acceleration constraints, how fast can joints move and accelerate. The fact that the position of the robot is unclear. 
+
+Name few different constraints that apply in Cartesian (or work) space 
+
+Computational demand and analytic complexity, Inverse kinematics needed, joint range of motion limits. If end-effector is to be moved in a straight line, is the path followable by rest of the robot? Position and orientation constraints that define the boundaries of the end-effector.

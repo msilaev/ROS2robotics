@@ -1,0 +1,21 @@
+Task 5
+
+Here we build obstacle-avoiding robot with lidar sensor. The world file is in sensor_trutorial_lidar.sdf. 
+
+Start it with :
+
+ign gazebo sensor_trutorial_lidar.sdf
+
+We need to bridge two topics:
+ros2 run ros_gz_bridge parameter_bridge /lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan
+ros2 run ros_gz_bridge parameter_bridge /cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist
+ros2 run ros_gz_bridge parameter_bridge /keyboard/keypress@std_msgs/msg/Int32@ignition.msgs.Int32
+
+
+Subscriber and publisher to ros2 topics /lidar and /cmd_vel are in the package lidar_avoidance.
+To setup package put files in /src folde, then run from the root :
+
+colcon build
+source install/local_setup.bash
+ros2 run lidar_avoidance lidarNode
+ros2 run lidar_avoidance keyboardNode

@@ -1,0 +1,41 @@
+# ROS 2 build and development directories
+**/build/
+**/install/
+**/log/
+**/install_isolated/
+**/build_isolated/
+**/devel_isolated/
+**/.devel/
+.deps/
+CMakeLists.txt.user
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# ROS 2 environment files
+*.yaml
+*.yml
+*.launch
+*.log
+*.pyc
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*~ 
+
+# Python virtual environments
+venv/
+env/
+.venv/
+.pyenv/
+*.env
+
+# Miscellaneous system files
+.DS_Store
+Thumbs.db
+

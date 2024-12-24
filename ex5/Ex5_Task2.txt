@@ -1,0 +1,52 @@
+2. From Turtlebot (TF display) we can see the position and orientation data of the base_link, wheels as well as imu_link and odometry.
+The map has two topics /map and /map_updates. The whole World/map is first categorized as missing and the /map_updates topic then builds the world/map into /map topic by updating it in slices when data comes from the laser scan. LaserScan uses the /scan topic to publish data from the sensor about the surrounding environment. This data is used to detect e.g. walls, obstacles and open spaces.
+
+
+3. pgm file 2D grayscale image includes a picture of the scanned map, created from the occupancy data.
+YAML file includes path to pgm image, resolution of the map in meters/pixel, origin 2-D pose of the lower-left pixel in the map, occupied thresh pixels with occupancy probability greater than the threshold are considered occupied, free thresh pixels with occupancy probability less than the threshold are considered free, negate reverses free/occupied semantics.
+
+4. 
+options = {
+  map_builder = MAP_BUILDER,
+  trajectory_builder = TRAJECTORY_BUILDER,
+  map_frame = "map",
+  tracking_frame = "imu_link",
+  published_frame = "odom",
+  odom_frame = "odom",
+  provide_odom_frame = false,
+  publish_frame_projected_to_2d = true,
+  use_odometry = true,    <------ Position estimation data.
+  use_nav_sat = false,    <----|
+  use_landmarks = false,  <----|------ Optional data sources GPS, environmental landmarks. This increases global accuracy for large areas.
+  num_laser_scans = 1,     <--------  Number of laser scans, 1 for LiDAR
+  num_multi_echo_laser_scans = 0, <-------- 3D point clouds.
+  num_subdivisions_per_laser_scan = 1,
+  num_point_clouds = 0,
+  lookup_transform_timeout_sec = 0.2,   <------------   time allowed to retrieve transformations
+  submap_publish_period_sec = 0.3,    
+  pose_publish_period_sec = 5e-3,
+  trajectory_publish_period_sec = 30e-3,   <---------   These control visualization. Controls submap publishing.   
+  rangefinder_sampling_ratio = 1.,
+  odometry_sampling_ratio = 1.,
+  fixed_frame_pose_sampling_ratio = 1.,    <--------- Probability of including the following data in calculations.
+  imu_sampling_ratio = 1.,
+  landmarks_sampling_ratio = 1.,
+}
+
+MAP_BUILDER.use_trajectory_builder_2d = true
+
+TRAJECTORY_BUILDER_2D.min_range = 0.12
+TRAJECTORY_BUILDER_2D.max_range = 3.5    <----- sensor detection range
+TRAJECTORY_BUILDER_2D.missing_data_ray_length = 3.   <---- 
+TRAJECTORY_BUILDER_2D.use_imu_data = false      <-------------------------- Align robots orientation with gravity
+TRAJECTORY_BUILDER_2D.use_online_correlative_scan_matching = true   <--- Aligns new scans of the map with the existing map.
+TRAJECTORY_BUILDER_2D.motion_filter.max_angle_radians = math.rad(0.1)  <---- filters minor rotational changes to reduce noise.
+
+POSE_GRAPH.constraint_builder.min_score = 0.65
+POSE_GRAPH.constraint_builder.global_localization_min_score = 0.7   <----- Thresholds for accepting scan matches.
+
+
+5. Making max range lower causes the SLAM mapping to rely on closer features. There can be an increase in errors due to scan matching being less reliable. This is caused by small features being less unique. Short range can also cause drift due to restricted loop closure.
+
+
+Increasing the range gives SLAM mapping a greater context thus it has the opposite affect of what was mentioned before. This also causes a increase in computational load.
